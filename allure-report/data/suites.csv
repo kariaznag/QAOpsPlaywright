@@ -1,0 +1,7 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","38301","@Smoke clientAppPO","","2026-10-31","passed","2026-10-31","","clientApp_MultiDatasets.spec.js","",""
+"","9293","@Smoke Popup validations","safari","2026-10-31","passed","2026-10-31","","moreValidations.spec.js","",""
+"","11439","@Smoke clientAppPO","safari","2026-10-31","passed","2026-10-31","","clientApp_MultiDatasets.spec.js","",""
+"","39428","@Smoke clientAppPO","","2026-10-31","passed","2026-10-31","","clientApp_PageObjectImp.spec.js","",""
+"","11488","@Smoke clientAppPO","safari","2026-10-31","passed","2026-10-31","","clientApp_PageObjectImp.spec.js","",""
+"","40646","@Smoke Popup validations","","2026-10-31","passed","2026-10-31","","moreValidations.spec.js","",""
