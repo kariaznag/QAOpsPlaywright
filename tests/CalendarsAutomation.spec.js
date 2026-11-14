@@ -15,6 +15,8 @@ test('calendars' , async ({page}) => {
     await page.locator(".react-calendar__year-view__months__month").nth(Number(month)-1).click();
     const monthName = ((await page.locator(".react-calendar__navigation__label").textContent()) || "").split(" ")[0];
     await page.locator("[aria-label*= '"+monthName+" "+date+"']").click();
+    //calendar test
+    
     await expect(page.locator('.react-date-picker__inputGroup input[name="date"]').getAttribute('value')).resolves.toContain(year+"-0"+month+"-0"+date);//we can also use .inputValue() instead of getAttribute('value') to get the value of the input field
     
 
