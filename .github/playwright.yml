@@ -13,11 +13,17 @@ jobs:
       with:
         node-version: lts/*
     - name: Install dependencies
-      run: npm ci
-    - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npm ci # to install the required dependencies in the package.json file. this covers the installation of azure devops extension and playwright test framework
+   # - name: Install Playwright Browsers
+   #   run: npx playwright install --with-deps # this step is not needed when using the azure image, azure provides the browsers by default.
+    - name: Azure Login # to login to azure devops using the service principal credentials we stored in the secrets 
+      uses: azure/login@v3
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - name: Run Playwright tests
-      run: npx playwright test
+      env:
+        PLAYWRIGHT_SERVICE_URL: ${{ vars.PLAYWRIGHT_SERVICE_URL }} # where all tests will be triggered 
+      run: npx playwright test --grep "@Smoke" --config=playwright.service.config.js --workers=4 # we use the azure config file.
     - uses: actions/upload-artifact@v5 # Upload test report as artifact
       if: ${{ !cancelled() }}
       with:
