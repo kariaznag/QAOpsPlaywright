@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Playwright Tests sharding
 on:
   push:
     branches: [ main, master ]
@@ -24,7 +24,7 @@ jobs:
       run: npx playwright install --with-deps
 
     - name: Run Playwright tests
-      run: npx playwright test --grep @Smoke --config playwright.config.js --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob --workers=4 
+      run: xvfb-run npx playwright test --grep @Smoke --config playwright.config.js --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob --workers=4 
       # this translates to run shard 1 of 4, shard 2 of 4, shard 3 of 4, and shard 4 of 4. until all shards are lanched on multiple machines and generates a blob report for each shard.
       # The blob report is a json file that contains the test results for each shard. 
       # Specifying --workers=4 will run 4 tests in parallel on each shard, so that we can run all the tests in a shorter time.
