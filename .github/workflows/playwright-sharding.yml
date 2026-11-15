@@ -1,0 +1,70 @@
+name: Playwright Tests
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+jobs:
+  playwright-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    strategy:   
+      fail-fast: false
+      matrix:
+        shardIndex: [1, 2, 3, 4] # we are asking for 4 machines to run 4 shards, so the matrix will create 4 jobs, each job will run a subset of the tests.
+        shardTotal: [4]
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+    - name: Install Playwright browsers # we will need to install browsers because github runners do not have browsers installed by default, unlike azure devops hosted agents.
+      run: npx playwright install --with-deps
+
+    - name: Run Playwright tests
+      run: npx playwright test --grep @Smoke --config playwright.config.js --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob --workers=4 
+      # this translates to run shard 1 of 4, shard 2 of 4, shard 3 of 4, and shard 4 of 4. until all shards are lanched on multiple machines and generates a blob report for each shard.
+      # The blob report is a json file that contains the test results for each shard. 
+      # Specifying --workers=4 will run 4 tests in parallel on each shard, so that we can run all the tests in a shorter time.
+
+    - name: Upload blob report to GitHub Actions Artifacts # for each shard, we will upload the blob report to GitHub Actions Artifacts, so that we can download the blob report for each shard and merge them into a single blob report.
+      if: ${{ !cancelled() }}
+      uses: actions/upload-artifact@v5
+      with:
+        name: blob-report-${{ matrix.shardIndex }}
+        path: blob-report
+        retention-days: 1
+
+
+  merge-reports:
+    # Merge reports after playwright-tests, even if some shards have failed
+    if: ${{ !cancelled() }}
+    needs: [playwright-tests]
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
+      with:
+        node-version: lts/*
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Download blob reports from GitHub Actions Artifacts
+      uses: actions/download-artifact@v5
+      with:
+        path: all-blob-reports
+        pattern: blob-report-*
+        merge-multiple: true
+
+    - name: Merge into HTML Report
+      run: npx playwright merge-reports --reporter html ./all-blob-reports #generates a single html report from all the blob reports downloaded from GitHub Actions Artifacts.
+
+    - name: Upload HTML report
+      uses: actions/upload-artifact@v5
+      with:
+        name: html-report--attempt-${{ github.run_attempt }}
+        path: playwright-report
+        retention-days: 14
