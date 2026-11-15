@@ -20,8 +20,9 @@ jobs:
         node-version: lts/*
     - name: Install dependencies
       run: npm ci
-    - name: Install Playwright browsers # we will need to install browsers because github runners do not have browsers installed by default, unlike azure devops hosted agents.
-      run: npx playwright install --with-deps
+    - name: Install Playwright browsers # we will need to install browsers because github runners do not have browsers installed by default, unlike azure devops hosted agents. 
+    # This step is the most time consuming while running cicd tests on GitHub Actions
+      run: npx playwright install --with-deps # With deps means dependencies.
 
     - name: Run Playwright tests
       run: xvfb-run npx playwright test --grep @Smoke --config playwright.config.js --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob --workers=4 
@@ -67,4 +68,4 @@ jobs:
       with:
         name: html-report--attempt-${{ github.run_attempt }}
         path: playwright-report
-        retention-days: 14
+        retention-days: 30
