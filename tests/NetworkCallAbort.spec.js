@@ -24,7 +24,7 @@ test('@API @Smoke Network call abort', async ({browser}) =>{
     await page.locator("#signInBtn").click();
     await page.waitForLoadState('networkidle');
 
-    await page.pause();
+    //await page.pause();
     const cardTitles = await page.locator(".card-title a").allTextContents();
     //console.log(await page.locator("[style*='block']").textContent());
 

@@ -37,7 +37,7 @@ test(`clientApp_MultiDatasets for ${data.productName}`, async ({ page }) => {
    
 }
 
-customTest('@Smoke clientAppPO', async ({ page, testDataForOrder }) => {
+customTest('clientAppPO', async ({ page, testDataForOrder }) => {
    
 //Use the page object manager we created to centralizes the access of page objects
    const poManager = new POManager(page);
