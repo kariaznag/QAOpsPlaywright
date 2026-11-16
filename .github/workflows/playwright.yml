@@ -6,12 +6,13 @@ on:
     branches: [ main, master ]
 jobs:
   test:
+    timeout-minutes: 60
     runs-on: ubuntu-latest #the tests will run on the ubuntu operating system
     steps:
     - uses: actions/checkout@v6 #to checkout the latest main branch code
     - uses: actions/setup-node@v6 # to setup the node environment
       with:
-        node-version: lts/*
+        node-version: lts/* # to use the latest lts version of node.js
     - name: Install dependencies
       run: npm ci # to install the required dependencies in the package.json file. this covers the installation of azure devops extension and playwright test framework
    # - name: Install Playwright Browsers

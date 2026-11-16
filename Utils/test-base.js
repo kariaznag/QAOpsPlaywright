@@ -5,10 +5,9 @@ const base = require('@playwright/test');
 exports.customTest = base.test.extend(
     {
         testDataForOrder : { 
-            email : "karima.aznagg@gmail.com",
-            password : "Domtomsalimin8*",
-            productName : "ZARA COAT 3"
+            email : "anshika@gmail.com",
+            password : "Iamking@000",
+            productName : "ADIDAS ORIGINAL"
     }
-
     }
 )

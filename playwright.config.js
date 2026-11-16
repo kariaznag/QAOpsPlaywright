@@ -1,6 +1,7 @@
 // @ts-check
 //import { defineConfig, devices } from '@playwright/test';
 const { defineConfig } = require('@playwright/test');
+const { truncate } = require('node:fs/promises');
 
 /**
  * @see https://playwright.dev/docs/test-configuration
@@ -22,7 +23,7 @@ const config = ({
     
     browserName : 'chromium',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    headless : false,
+    headless : true,
     screenshot : 'on',//'only-on-failure'
     trace: 'on', // 'retain-on-failure' if we want to keep the trace for failed tests, 'on' if we want to keep the trace for all tests
 
