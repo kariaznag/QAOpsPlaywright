@@ -14,19 +14,21 @@ test('@API @Smoke Network call abort', async ({browser}) =>{
     page.on('response' , response => console.log(response.status()));
     //page.route('**/*.css', route => route.abort());
     await page.goto('https://rahulshettyacademy.com/loginpagePractise/');
-    await page.waitForLoadState('networkidle');
+    //await page.waitForLoadState('networkidle');
 
     //to stop the network call for images
     //page.route('**/*.{jpg, jpeg, png}', route => route.abort());
 
     await page.locator("#username").fill("rahulshettyacademy");
     await page.locator("[type='password']").fill("Learning@830$3mK2");
-    await page.locator("#signInBtn").click();
-    await page.waitForLoadState('networkidle');
+    //await page.locator("#signInBtn").click();
+    //await page.waitForLoadState('networkidle');
+    await Promise.all([
+        page.waitForLoadState("networkidle"),
+        page.locator("#signInBtn").click()
+    ]);
 
     //await page.pause();
     const cardTitles = await page.locator(".card-title a").allTextContents();
-    //console.log(await page.locator("[style*='block']").textContent());
-
-    
+    console.log(cardTitles);    
 });
