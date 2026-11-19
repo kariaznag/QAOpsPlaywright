@@ -43,6 +43,7 @@ test.describe('Visual testing', ()=>{//we described this test suite as Visual te
 test('Visual testing 2', async({page}) => {
     await page.goto('http://www.google.com/');
     expect(await page.screenshot()).not.toMatchSnapshot({ path: 'myScreenshot.png' });
+    //just test the updating 
 });
 });
 
